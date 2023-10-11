@@ -1,77 +1,92 @@
-# Observability with OpenTelemetry on Kubernetes
-Observability is the ability to gain insight into the behavior and performance of a system through its telemetry data, including metrics, logs, and traces. OpenTelemetry is a vendor-neutral, open-source framework that provides a standardized way to instrument, collect, and export telemetry data from distributed systems.
-
-This document will guide you through the process of setting up observability using OpenTelemetry, including installing cert-manager, Helm, OpenTelemetry, and Tempo, as well as creating YAML files and deploying applications.
-
-Index Topics
-| Index | Content                                                                                    |
-|-------|--------------------------------------------------------------------------------------------|
-| 1     | Cert-manager - What it is and how to install it on a Kubernetes cluster                     |
-| 2     | Helm - What it is, Helm-charts, and how to install it on a Kubernetes cluster                |
-| 3     | OpenTelemetry - What it is and how to install it on a Kubernetes cluster using Helm charts |
-| 4     | OpenTelemetry Collector and Sidecar mode - How to create YAML files for both                |
-| 5     | Node app and Java app deployment using OpenTelemetry                                        |
-| 6     | Tempo - What it is and how to install it using a Helm chart                                 |
-
-
-# What is cert-manager? and Installation on kubernetes cluster.
-Cert-manager is a Kubernetes add-on that automates the management and issuance of TLS certificates from various certificate authorities (CAs). It provides an easy way to secure your Kubernetes applications by automatically obtaining and renewing TLS certificates.
-
-You can install cert-manager via [cert-manager](https://cert-manager.io/docs/installation/kubectl/). More information is available [here](https://cert-manager.io/docs/).
-
-Update the Helm repository:
-      
-```helm repo update```
-
-# What is Helm? What are Helm-charts and Installation on kubernetes cluster. 
-Helm is a package manager for Kubernetes that allows you to easily install, manage, and upgrade applications on your cluster. Helm-charts are preconfigured packages that contain all the resources needed to deploy an application on Kubernetes.
-
-To install Helm on your Kubernetes cluster, follow these steps:
-
-Download the Helm binary from the official Helm website:
-
-```$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3```
-
-```$ chmod 700 get_helm.sh```
-
-```$ ./get_helm.sh```
-
-
-# What is OpenTelemetry & Installation on k8s cluster using Helm-charts.
-OpenTelemetry is a framework that allows you to instrument your applications to collect telemetry data such as traces, metrics, and logs. It provides a vendor-neutral, open-source way to collect telemetry data from distributed systems.
-
-To install OpenTelemetry on your Kubernetes cluster using Helm charts, follow these steps:
-
-Add the OpenTelemetry Helm repository:
-
-```helm repo add open-telemetry https://opentelemetry.github.io/opentelemetry-helm-charts```
-
-Update the Helm repository:
-
-```helm repo update```
-
-# Configuring Opentelemetry YAML file
-
-# Configuring app.yaml file as a deployment using OpenTelemetry.
-
-# What is Tempo? and Installation using Helm-chart.
-Tempo is an open-source, easy-to-use, and scalable distributed tracing backend that supports the OpenTelemetry standard. It allows you to store and analyze your traces in a cost-effective way.
-
-To install Tempo on your Kubernetes cluster using Helm charts, follow these steps:
-
-Add repository
-
-```helm repo add grafana https://grafana.github.io/helm-charts```
-
-Update repository
-
-```helm repo update```
-
-Install chart
-
-```helm install my-tempo grafana/tempo --version 1.0.2```
+# Observability
 
 
 
+## Getting started
 
 
+
+Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+
+## Add your files
+
+- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
+- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+
+```
+cd existing_repo
+git remote add origin https://gitlab.com/devtoppers/Observability.git
+git branch -M main
+git push -uf origin main
+```
+
+## Integrate with your tools
+
+- [ ] [Set up project integrations](https://gitlab.com/devtoppers/Observability/-/settings/integrations)
+
+## Collaborate with your team
+
+- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
+- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
+- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
+- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
+- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+
+## Test and Deploy
+
+Use the built-in continuous integration in GitLab.
+
+- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
+- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
+- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
+- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
+- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+
+***
+
+# Editing this README
+
+When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+
+## Suggestions for a good README
+Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+
+## Name
+Choose a self-explaining name for your project.
+
+## Description
+Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+
+## Badges
+On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+
+## Visuals
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+
+## Installation
+Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+## Usage
+Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+
+## Support
+Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+
+## Roadmap
+If you have ideas for releases in the future, it is a good idea to list them in the README.
+
+## Contributing
+State if you are open to contributions and what your requirements are for accepting them.
+
+For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+
+You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+
+## Authors and acknowledgment
+Show your appreciation to those who have contributed to the project.
+
+## License
+For open source projects, say how it is licensed.
+
+## Project status
+If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.

@@ -1,0 +1,17 @@
+type: S3
+config:
+  bucket: "demoalerts"
+  endpoint: "<BUCKET_ENDPOINT>"
+  access_key: "<PROVIDE_ACCESS_KEY>"
+  secret_key: "<PROVIDE_SECRET_KEY>"
+  region: "us-east-1"
+  insecure: false
+  signature_version2: false
+  put_user_metadata: {}
+  http_config:
+    idle_conn_timeout: 0s
+    response_header_timeout: 0s
+    insecure_skip_verify: false
+  trace:
+    enable: false
+  part_size: 0

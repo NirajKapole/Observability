@@ -1,0 +1,39 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+spec:
+  mode: deployment
+  hostNetwork: true
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+    processors:
+    exporters:
+      logging:
+        verbosity: detailed
+      otlp:
+        endpoint: http://my-tempo:4317
+        tls:
+          insecure: "true"
+      jaeger:
+        endpoint: http://my-tempo:14250
+        tls: 
+          insecure: "true"
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: []
+          exporters: [jaeger,otlp]
+        logs:
+          receivers: [otlp]
+          exporters: [otlp]
+      telemetry:
+        logs:
+          level: debug
