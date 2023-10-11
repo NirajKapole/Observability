@@ -28,13 +28,13 @@ Helm is a package manager for Kubernetes that allows you to easily install, mana
 To install Helm on your Kubernetes cluster, follow these steps:
 
 Download the Helm binary from the official Helm website:
-
+```
 $ curl -fsSL -o get\_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 
 $ chmod 700 get\_helm.sh
 
 $ ./get\_helm.sh
-
+```
 Update the Helm repository:
 
 helm repo update
@@ -117,15 +117,15 @@ You can disable webhooks alltogether by disabling .Values.admissionWebhooks.crea
 
 
 Add Repository
-
+```
 $ helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 
 $ helm repo update
-
+```
 Install Chart
-
+```
 $ helm install \opentelemetry-operator open-telemetry/opentelemetry-operator
-
+```
 Installation of Opentelemetry-collector
 
 Prerequisites
@@ -135,264 +135,264 @@ Kubernetes 1.23+
 Helm 3.9+
 
 Installing the Chart
-
+```
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-
+```
 To install the chart with the release name my-opentelemetry-collector, run the following command:
-
+```
 helm install my-opentelemetry-collector open-telemetry/opentelemetry-collector
-
+```
 **Configuring Opentelemetry YAML file**  
-
+```
 apiVersion: opentelemetry.io/v1alpha1
 
 kind: OpenTelemetryCollector
 
 metadata:
 
-`  `name: otel-collector
+  name: otel-collector
 
 spec:
 
-`  `mode: deployment
+  mode: deployment
 
-`  `hostNetwork: true
+  hostNetwork: true
 
-`  `config: |
+  config: |
 
-`    `receivers:
+    receivers:
 
-`      `otlp:
+       otlp:
 
-`        `protocols:
+        protocols:
 
-`          `grpc:
+          grpc:
 
-`            `endpoint: "0.0.0.0:4317"
+            endpoint: "0.0.0.0:4317"
 
-`          `http:
+          http:
 
-`            `endpoint: "0.0.0.0:4318"
+            endpoint: "0.0.0.0:4318"
 
-`    `processors:
+    processors:
 
-`    `exporters:
+    exporters:
 
-`      `logging:
+    logging:
 
-`        `verbosity: detailed
+        verbosity: detailed
 
-`      `otlp:
+      otlp:
 
-`        `endpoint: http://my-tempo:4317
+        endpoint: http://my-tempo:4317
 
-`        `tls:
+        tls:
 
-`          `insecure: "true"
+          insecure: "true"
 
-`      `jaeger:
+      jaeger:
 
-`        `endpoint: http://my-tempo:14250
+        endpoint: http://my-tempo:14250
 
-`        `tls: 
+        tls: 
 
-`          `insecure: "true"
+          insecure: "true"
 
-`    `service:
+    service:
 
-`      `pipelines:
+      pipelines:
 
-`        `traces:
+        traces:
 
-`          `receivers: [otlp]
+          receivers: [otlp]
 
-`          `processors: []
+          processors: []
 
-`          `exporters: [jaeger,otlp]
+          exporters: [jaeger,otlp]
 
-`        `logs:
+        logs:
 
-`          `receivers: [otlp]
+          receivers: [otlp]
 
-`          `exporters: [otlp]
+          exporters: [otlp]
 
-`      `telemetry:
+      telemetry:
 
-`        `logs:
+        logs:
 
-`          `level: debug
-
+          level: debug
+```
 **Configuring Opentelemetry-collector using sidecar mode.**
-
+```
 apiVersion: opentelemetry.io/v1alpha1
 
 kind: OpenTelemetryCollector
 
 metadata:
 
-`  `name: otel
+  name: otel
 
 spec:
 
-`  `mode: sidecar
+  mode: sidecar
 
-`  `hostNetwork: true
+  hostNetwork: true
 
-`  `config: |
+  config: |
 
-`    `receivers:
+    receivers:
 
-`      `otlp:
+      otlp:
 
-`        `protocols:
+        protocols:
 
-`          `grpc:
+          grpc:
 
-`          `http:
+            http:
 
-`    `processors:
+    processors:
 
-`      `batch:
+      batch:
 
-`      `memory\_limiter:
+        memory_limiter:
 
-`        `limit\_mib: 400
+        limit_mib: 400
 
-`        `spike\_limit\_mib: 100
+          spike_limit_mib: 100
 
-`        `check\_interval: 5s
+          check\_interval: 5s
 
-`    `exporters:
+    exporters:
 
-`      `logging:
+      logging:
 
-`        `verbosity: detailed
+        verbosity: detailed
 
-`      `otlp:
+          otlp:
 
-`        `endpoint: "otel-collector-collector.default:4317"
+            endpoint: "otel-collector-collector.default:4317"
 
-`        `tls:
+          tls:
 
-`          `insecure: true
+           insecure: true
 
-`        `sending\_queue:
+           sending_queue:
 
-`          `num\_consumers: 4
+           num_consumers: 4
 
-`          `queue\_size: 100
+           queue_size: 100
 
-`        `retry\_on\_failure:
+           retry_on_failure:
 
-`          `enabled: true
+           enabled: true
 
-`    `service:
+     service:
 
-`      `pipelines:
+       pipelines:
 
-`        `traces:
+         traces:
 
-`          `receivers: [otlp]
+           receivers: [otlp]
 
-`          `processors: [memory\_limiter, batch]
+           processors: [memory_limiter, batch]
 
-`          `exporters: [otlp]
+           exporters: [otlp]
 
-`        `metrics:
+         metrics:
 
-`          `receivers: [otlp]
+           receivers: [otlp]
 
-`          `exporters: [otlp]
+           exporters: [otlp]
 
-`        `logs:
+         logs:
 
-`          `receivers: [otlp]
+           receivers: [otlp]
 
-`          `exporters: [otlp]
+           exporters: [otlp]
 
-`      `telemetry:
+       telemetry:
 
-`        `logs:
+         logs:
 
-`          `level: debug
-
+           level: debug
+```
 **Configuring app.yaml file as a deployment using OpenTelemetry.**
-
+```
 apiVersion: apps/v1
 
 kind: Deployment
 
 metadata:
 
-`  `name: node-app
+  name: node-app
 
 spec:
 
-`  `selector:
+  selector:
 
-`    `matchLabels:
+    matchLabels:
 
-`      `app: node-app
+      app: node-app
 
-`  `template:
+  template:
 
-`    `metadata:
+    metadata:
 
-`      `labels:
+      labels:
 
-`        `app: node-app
+        app: node-app
 
-`      `annotations:
+      annotations:
 
-`        `sidecar.opentelemetry.io/inject: "true"
+        sidecar.opentelemetry.io/inject: "true"
 
-`    `spec:
+    spec:
 
-`      `terminationGracePeriodSeconds: 5
+      terminationGracePeriodSeconds: 5
 
-`      `containers:
+      containers:
 
-`      `- name: server
+        - name: server
 
-`        `image: adityajoshi12/service-a:1.0
+          image: adityajoshi12/service-a:1.0
 
-`        `imagePullPolicy: Always
+          imagePullPolicy: Always
 
-`        `ports:
+          ports:
 
-`        `- containerPort: 8080
+            - containerPort: 8080
 
-`        `env:
+              env:
 
-`        `- name: OTEL\_EXPORTER\_OTLP\_ENDPOINT
+           - name: OTEL\_EXPORTER\_OTLP\_ENDPOINT
 
-`          `# value: "http://otel-collector.default.svc.cluster.local:4317"
+              # value: "http://otel-collector.default.svc.cluster.local:4317"
 
-`          `value: "http://otel-collector-collector:4317"
+             value: "http://otel-collector-collector:4317"
 
-`        `- name: OTLP\_SERVICENAME
+           - name: OTLP\_SERVICENAME
 
-`          `value: "node-app"
+             value: "node-app"
 
-`        `- name: SERVICE\_B
+           - name: SERVICE_B
 
-`          `value: "java-app:8080"
+             value: "java-app:8080"
 
-`        `resources:
+          resources:
 
-`         `requests:
+          requests:
 
-`            `memory: "64Mi"
+            memory: "64Mi"
 
-`            `cpu: "250m"
+            cpu: "250m"
 
-`         `limits:
+          limits:
 
-`            `memory: "128Mi"
+            memory: "128Mi"
 
-`            `cpu: "500m"
+            cpu: "500m"
 
-\---
+---
 
 apiVersion: v1
 
@@ -400,23 +400,23 @@ kind: Service
 
 metadata:
 
-`  `name: node-app
+  name: node-app
 
 spec:
 
-`  `type: ClusterIP
+  type: ClusterIP
 
-`  `selector:
+    selector:
 
-`    `app: node-app
+      app: node-app
 
-`  `ports:
+  ports:
 
-`  `- name: app
+    - name: app
 
-`    `port: 8080
+      port: 8080
 
-\---
+---
 
 apiVersion: apps/v1
 
@@ -424,71 +424,71 @@ kind: Deployment
 
 metadata:
 
-`  `name: java-app
+  name: java-app
 
 spec:
 
-`  `selector:
+  selector:
 
-`    `matchLabels:
+    matchLabels:
 
-`      `app: java-app
+      app: java-app
 
-`  `template:
+  template:
 
-`    `metadata:
+    metadata:
 
-`      `labels:
+      labels:
 
-`        `app: java-app
+        app: java-app
 
-`      `annotations:
+          annotations:
 
-`        `sidecar.opentelemetry.io/inject: "true"
+            sidecar.opentelemetry.io/inject: "true"
 
-`    `spec:
+   spec:
 
-`      `containers:
+     containers:
 
-`        `- name: java-app
+       - name: java-app
 
-`          `image: adityajoshi12/service-b:1.0
+         image: adityajoshi12/service-b:1.0
 
-`          `imagePullPolicy: Always
+         imagePullPolicy: Always
 
-`          `ports:
+         ports:
 
-`          `- containerPort: 8080
+          - containerPort: 8080
 
-`          `env:
+         env:
 
-`          `- name: OTEL\_EXPORTER\_OTLP\_ENDPOINT
+          - name: OTEL\_EXPORTER\_OTLP\_ENDPOINT
 
-`            `value: "http://otel-collector-collector:4317"
+            value: "http://otel-collector-collector:4317"
 
-`          `- name: OTEL\_TRACES\_EXPORTER
+          - name: OTEL\_TRACES\_EXPORTER
 
-`            `value: "otlp"
+            value: "otlp"
 
-`          `- name: OTEL\_RESOURCE\_ATTRIBUTES
+          - name: OTEL\_RESOURCE\_ATTRIBUTES
 
-`            `value: "service.name=java-app"
+            value: "service.name=java-app"
 
-`          `resources:
+         resources:
 
-`            `requests:
+           requests:
 
-`                `memory: "128Mi"
+             memory: "128Mi"
 
-`                `cpu: "250m"
+             cpu: "250m"
 
-`            `limits:
+           limits:
 
-`                `memory: "248Mi"
+             memory: "248Mi"
 
-`                `cpu: "500m"
+             cpu: "500m"
 
-\---
+---
 
 apiVersion: v1
 
@@ -496,22 +496,22 @@ kind: Service
 
 metadata:
 
-`  `name: java-app
+  name: java-app
 
 spec:
 
-`  `type: ClusterIP
+  type: ClusterIP
 
-`  `selector:
+  selector:
 
-`    `app: java-app
+    app: java-app
 
-`  `ports:
+  ports:
 
-`  `- name: app
+  - name: app
 
-`    `port: 8080
-
+    port: 8080
+```
 **What is Tempo? and Installation using Helm-chart.**
 
 Tempo is an open-source, easy-to-use, and scalable distributed tracing backend that supports the OpenTelemetry standard. It allows you to store and analyze your traces in a cost-effective way.
@@ -521,13 +521,14 @@ For more information refer via [source code](https://github.com/grafana/tempo).
 To install Tempo on your Kubernetes cluster using Helm charts, follow these steps:
 
 Add repository
-
+```
 helm repo add grafana https://grafana.github.io/helm-charts
-
+```
 Update repository
-
+```
 helm repo update
-
+```
 Install chart
-
+```
 helm install my-tempo grafana/tempo --version 1.0.2
+```
